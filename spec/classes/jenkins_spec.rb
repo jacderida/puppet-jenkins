@@ -47,22 +47,5 @@ describe 'jenkins', :type => :module do
       let(:params) { { :proxy_host => '1.2.3.4', :proxy_port => 1234 } }
       it { should contain_class 'jenkins::proxy'}
     end
-
-    describe 'with firewall, configure_firewall => true' do
-      let(:pre_condition) { ['define firewall ($action, $state, $dport, $proto) {}'] }
-      let(:params) { { :configure_firewall => true } }
-      it { should contain_class 'jenkins::firewall' }
-    end
-
-    describe 'with firewall, configure_firewall => false' do
-      let(:pre_condition) { ['define firewall ($action, $state, $dport, $proto) {}'] }
-      let(:params) { { :configure_firewall => false } }
-      it { should_not contain_class 'jenkins::firewall' }
-    end
-
-    describe 'with firewall, configure_firewall unset' do
-      let(:pre_condition) { 'define firewall ($action, $state, $dport, $proto) {}' }
-      it { expect { should raise_error(Puppet::Error) } }
-    end
   end
 end

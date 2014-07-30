@@ -76,7 +76,6 @@ class jenkins(
   $service_ensure     = $jenkins::params::service_ensure,
   $config_hash        = {},
   $plugin_hash        = {},
-  $configure_firewall = undef,
   $install_java       = $jenkins::params::install_java,
   $proxy_host         = undef,
   $proxy_port         = undef,
@@ -118,13 +117,6 @@ class jenkins(
 
   class {'jenkins::service':}
 
-  if defined('::firewall') {
-    if $configure_firewall == undef {
-      fail('The firewall module is included in your manifests, please configure $configure_firewall in the jenkins module')
-    } elsif $configure_firewall {
-      class {'jenkins::firewall':}
-    }
-  }
   if $cli {
     class {'jenkins::cli':}
   }
@@ -148,12 +140,6 @@ class jenkins(
       Class['jenkins::repo'] ->
         Class['jenkins::package'] ->
           Anchor['jenkins::end']
-  }
-
-  if $configure_firewall {
-    Class['jenkins::service'] ->
-      Class['jenkins::firewall'] ->
-        Anchor['jenkins::end']
   }
 }
 # vim: ts=2 et sw=2 autoindent
